@@ -1,6 +1,7 @@
 local love = require "love"
 
 local game = {
+    difficulty = 1,
     state = {
         menu = true,
         paused = false,
@@ -9,14 +10,16 @@ local game = {
     }
 }
 
-
--- 遊戲玩家的光標
+-- Player's cursor
 local player = { 
     radius = 20,
     x = 30,
     y = 30
 }
 
+local enemies = {
+
+}
 
 function love.load()
     love.window.setTitle("Save the ball")
