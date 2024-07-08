@@ -27,23 +27,49 @@ local buttons = {
 
 local enemies = {}
 
-function love.load()
-    love.window.setTitle("Save the ball")
-    love.mouse.setVisible(false)
-
-    buttons.menu_state.play_game = button("Play Game", nil, nil, 120, 40)
-    buttons.menu_state.settings = button("Setting", nil, nil, 120, 40)
-    buttons.menu_state.exit_game = button("Exit Game", love.event.quit, nil, 120, 40)
+local function startNewGame()
+    game.state["menu"] = false
+    game.state["running"] = true
 
     table.insert(enemies, 1, enemy())
 end
 
+function love.mousepressed(x, y, button, istouch, presses)
+    if not game.state['running'] then
+        if button == 1 then
+            if game.state["menu"] then
+                for index in pairs(buttons.menu_state) do
+                    buttons.menu_state[index]:checkPressed(x, y, player.radius)
+                end
+            end
+        end
+    end
+end
+
+function love.load()
+    love.window.setTitle("Save the ball")
+    love.mouse.setVisible(false)
+
+    buttons.menu_state.play_game = button("Play Game", startNewGame, nil, 120, 40)
+    buttons.menu_state.settings = button("Setting", nil, nil, 120, 40)
+    buttons.menu_state.exit_game = button("Exit Game", love.event.quit, nil, 120, 40)
+
+    
+end
+
+
+
+
 function love.update(dt)
     player.x, player.y = love.mouse.getPosition()
 
-    for i = 1, #enemies do
-        enemies[i]:move(player.x, player.y)
+    if game.state["running"] then
+        for i = 1, #enemies do
+            enemies[i]:move(player.x, player.y)
+        end
     end
+
+    
 end
 
 
